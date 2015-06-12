@@ -87,7 +87,7 @@ proof (intro allI impI, elim conjE)
     by (cases a) (auto simp add: view_def)
 qed
 
-theorem "NI_secure"
+theorem monitor_secure: "NI_secure"
 using oc lr sc
 by (intro unwinding_theorem)
 
