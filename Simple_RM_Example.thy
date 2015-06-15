@@ -24,19 +24,8 @@ lemma [simp]: "\<And>d :: domain. d \<noteq> D1 \<longleftrightarrow> d = D2"
 using domain.exhaust by blast+
 
 interpretation Simple_RM s0 observe alter FP
-proof
-  show "refl FP" by (auto simp add: FP_def refl_on_def)
-next
-  show "trans FP" by (auto simp add: FP_def trans_def)
-next
-  fix u v
-  assume "(u, v) \<in> FP"
-  then show "observe u \<subseteq> observe v" by (auto simp add: FP_def)
-next
-  fix n u v
-  assume "n \<in> alter u" and "n \<in> observe v"
-  then show "(u, v) \<in> FP" by (auto simp add: FP_def)
-qed
+apply (unfold_locales)
+by (auto simp add: FP_def refl_on_def trans_def)
 
 theorem "NI_secure"
 using monitor_secure .

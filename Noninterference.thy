@@ -59,11 +59,11 @@ by blast+
 definition "output_consistent
 \<equiv> \<forall>a s t. (s \<sim>\<^bsub>dom a\<^esub> t) \<longrightarrow> out s a = out t a"
 
-definition "locally_respects_FP
-\<equiv> \<forall>s u a. \<not>((dom a) \<leadsto> u) \<longrightarrow> (s \<sim>\<^bsub>u\<^esub> (step s a))"
-
 definition "step_consistent
 \<equiv> \<forall>s t u a. (((dom a) \<leadsto> u) \<and> (s \<sim>\<^bsub>u\<^esub> t)) \<longrightarrow> ((step s a) \<sim>\<^bsub>u\<^esub> (step t a))"
+
+definition "locally_respects_FP
+\<equiv> \<forall>s u a. \<not>((dom a) \<leadsto> u) \<longrightarrow> (s \<sim>\<^bsub>u\<^esub> (step s a))"
 
 text \<open>In order to prove noninterference using these conditions, we use induction (of course).
 In the following, we use structural induction over the list of actions @{text \<alpha>}.
@@ -83,16 +83,16 @@ then directly follows using output consistency.
 lemma unwinding_lemma:
   assumes lr: "locally_respects_FP"
       and sc: "step_consistent"
-      and s_equiv_t: "s \<sim>\<^bsub>l\<^esub> t"
-  shows "(run s \<alpha>) \<sim>\<^bsub>l\<^esub> (run t (purge \<alpha> l))"
+      and s_equiv_t: "s \<sim>\<^bsub>u\<^esub> t"
+  shows "(run s \<alpha>) \<sim>\<^bsub>u\<^esub> (run t (purge \<alpha> u))"
     (is "?goal s t \<alpha>")
 using s_equiv_t
 proof (induction \<alpha> arbitrary: s t)
   case Nil
     -- \<open>Base case: empty list []\<close>
-    note `s \<sim>\<^bsub>l\<^esub> t`
+    note `s \<sim>\<^bsub>u\<^esub> t`
     moreover have "run s [] = s"
-              and "run t (purge [] (l)) = t"
+              and "run t (purge [] u) = t"
       by auto
     ultimately show "?goal s t []" by simp
 next
@@ -103,9 +103,9 @@ next
         (for any @{text s'} and @{text t'}):\<close>
     -- \<open>@{thm Cons.IH[of "s'" "t'"]}\<close>
     show "?goal s t (a' # \<alpha>')"
-    proof (cases "(dom a') \<leadsto> l")
-      assume flow: "(dom a', l) \<in> FP"
-      with `s \<sim>\<^bsub>l\<^esub> t` have "(step s a') \<sim>\<^bsub>l\<^esub> (step t a')"
+    proof (cases "(dom a') \<leadsto> u")
+      assume flow: "(dom a', u) \<in> FP"
+      with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> (step t a')"
         using sc              -- \<open>Step consistency\<close>
         unfolding step_consistent_def
         by auto
@@ -114,12 +114,12 @@ next
         by simp
       then show "?goal s t (a' # \<alpha>')" using flow by auto
     next
-      assume noflow: "(dom a', l) \<notin> FP"
-      then have "s \<sim>\<^bsub>l\<^esub> (step s a')"
+      assume noflow: "(dom a', u) \<notin> FP"
+      then have "s \<sim>\<^bsub>u\<^esub> (step s a')"
         using lr              -- \<open>Locally respects @{text \<leadsto>}\<close>
         unfolding locally_respects_FP_def
         by auto
-      with `s \<sim>\<^bsub>l\<^esub> t` have "(step s a') \<sim>\<^bsub>l\<^esub> t"
+      with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> t"
         using view_sym view_trans
         by blast
       then have "?goal (step s a') t \<alpha>'"
