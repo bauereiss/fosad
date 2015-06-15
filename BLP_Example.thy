@@ -1,5 +1,5 @@
 theory BLP_Example
-imports BLP_NI
+imports BLP_RM
 begin
 
 datatype subj = Maps | Chat | SysL | SysH
