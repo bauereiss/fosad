@@ -39,25 +39,48 @@ sublocale NI s0 step out FP dom
 using refl_FP trans_FP 
 by (unfold_locales)
 
+lemma view_coincidence:
+  assumes "s \<sim>\<^bsub>d\<^esub> t"
+      and "check (v :=\<^bsub>d\<^esub> e)"
+  shows "eval s e = eval t e"
+proof (intro coincidence)
+  from assms(2) have "FV e \<subseteq> observe d" by auto
+  with assms(1) show "\<forall>v \<in> FV e. s v = t v" unfolding view_def by auto
+qed
+
 sublocale Reference_Monitor s0 step out contents observe alter FP dom
 proof
   fix s t fix a :: "('var, 'dom) cmd"
+  obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "s \<sim>\<^bsub>dom a\<^esub> t"
   then show "out s a = out t a"
-    unfolding view_def
-    by (cases a) (auto intro: coincidence)
+  proof (cases "check a")
+    case True
+      then have "eval s e = eval t e" using `s \<sim>\<^bsub>dom a\<^esub> t` by (intro view_coincidence) auto
+      then show "out s a = out t a" using True by auto
+  next
+    case False
+      then have "out s a = 0" and "out t a = 0" by auto
+      then show "out s a = out t a" by auto
+  qed
 next
-  fix s t a n
+  fix s t n fix a :: "('var, 'dom) cmd"
+  obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "s \<sim>\<^bsub>dom a\<^esub> t"
      and "contents (step s a) n \<noteq> contents s n \<or> contents (step t a) n \<noteq> contents t n"
+  then have "check a"
+        and "contents (step s a) n = eval s e"
+        and "contents (step t a) n = eval t e"
+    by (auto split: split_if_asm)
   then show "contents (step s a) n = contents (step t a) n"
-    unfolding view_def
-    by (cases a) (auto intro: coincidence split: split_if_asm)
+    using `s \<sim>\<^bsub>dom a\<^esub> t`
+    by (auto intro: view_coincidence)
 next
-  fix s a n
+  fix s n fix a :: "('var, 'dom) cmd"
+  obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "contents (step s a) n \<noteq> contents s n"
-  then show "n \<in> alter (dom a)"
-    by (cases a) (auto split: split_if_asm)
+  then have "check a" and "v = n" by (auto split: split_if_asm)
+  then show "n \<in> alter (dom a)" by simp
 next
   fix u v
   assume "u \<leadsto> v"
