@@ -1,6 +1,10 @@
+section {* Reference Monitors *}
+
 theory Reference_Monitor
 imports "../Noninterference/Noninterference"
 begin
+
+subsection {* Definition *}
 
 locale Structured_State =
   Automaton s0 step out

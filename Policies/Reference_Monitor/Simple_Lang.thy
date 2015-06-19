@@ -1,6 +1,10 @@
+subsection {* Example: A Reference Monitor for a Simple Language *}
+
 theory Simple_Lang
 imports Main
 begin
+
+subsubsection {* Language *}
 
 type_synonym 'var state = "'var \<Rightarrow> integer"
 

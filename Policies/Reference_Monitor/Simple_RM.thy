@@ -1,3 +1,5 @@
+subsubsection {* Monitor *}
+
 theory Simple_RM
 imports Reference_Monitor Simple_Lang
 begin

@@ -65,19 +65,17 @@ definition "step_consistent
 definition "locally_respects_FP
 \<equiv> \<forall>s u a. \<not>((dom a) \<leadsto> u) \<longrightarrow> (s \<sim>\<^bsub>u\<^esub> (step s a))"
 
-text \<open>In order to prove noninterference using these conditions, we use induction (of course).
-In the following, we use structural induction over the list of actions @{text \<alpha>}.
+text \<open>In order to prove noninterference using these conditions, we use structural induction over
+the list of actions @{text \<alpha>}.
 
 The induction schema for lists looks as follows:
 @{thm [display] list.induct [no_vars]}
 
-Also, we don't directly prove noninterference as-is, but we generalize the statement slightly:
-Instead of running the lists of actions (unpurged and purged) from the starting state, we run them
-from two equivalent, but otherwise arbitrary states @{text s} and @{text t}, respectively. This
-makes the induction hypothesis much more useful, as we will see. Moreover, we focus first on
-showing that the states after the two runs are equivalent for an @{text l}-observer (when purging
-for @{text l}) --- the fact that afterwards also the outputs of @{text l}-actions are the same
-then directly follows using output consistency.
+We prove noninterference using a helper lemma: Instead of letting the lists of actions (unpurged
+and purged) run from the starting state, we let them run from two equivalent, but otherwise
+arbitrary states @{text s} and @{text t}, respectively. This makes the induction hypothesis much
+more useful, as we will see. Moreover, we focus first on showing that the states after the two runs
+are equivalent for an @{text l}-observer (when purging for @{text l}).
 \<close>
 
 lemma unwinding_lemma:
