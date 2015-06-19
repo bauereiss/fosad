@@ -1,7 +1,7 @@
 subsection {* Proving Noninterference *}
 
 theory BLP_NI
-imports BLP_Monitor Noninterference
+imports BLP_Monitor "../Noninterference/Noninterference"
 begin
 
 context BLP_Monitor

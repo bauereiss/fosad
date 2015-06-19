@@ -1,10 +1,10 @@
-session "BLP_NI" = "HOL" +
+session "Reference_Monitor" = "HOL" +
   options [document = pdf, document_output = "output"]
   theories [document = false]
     (* Foo *)
     (* Bar *)
   theories
-    Noninterference
-    BLP_NI
+    "Noninterference/Noninterference"
+    "Reference_Monitor/Simple_RM_Example"
   document_files
     "root.tex"

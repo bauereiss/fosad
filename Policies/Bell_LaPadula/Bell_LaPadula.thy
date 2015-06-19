@@ -1,5 +1,5 @@
 theory BLP_Monitor
-imports Noninterference
+imports "../Noninterference/Noninterference"
 begin
 
 datatype perm = Read | Write

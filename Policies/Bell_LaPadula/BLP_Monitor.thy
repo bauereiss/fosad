@@ -1,7 +1,7 @@
 section {* A Reference Monitor for Bell/LaPadula *}
 
 theory BLP_Monitor
-imports Automata
+imports "../Noninterference/Automata"
 begin
 
 subsection {* Defining the Monitor *}

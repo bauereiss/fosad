@@ -1,5 +1,5 @@
 theory BLP_RM
-imports BLP_Monitor Reference_Monitor
+imports BLP_Monitor "../Reference_Monitor/Reference_Monitor"
 begin
 
 context BLP_Monitor

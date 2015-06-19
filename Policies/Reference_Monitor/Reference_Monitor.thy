@@ -1,5 +1,5 @@
 theory Reference_Monitor
-imports Noninterference
+imports "../Noninterference/Noninterference"
 begin
 
 locale Structured_State =
