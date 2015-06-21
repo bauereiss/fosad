@@ -88,11 +88,10 @@ using s_equiv_t
 proof (induction \<alpha> arbitrary: s t)
   case Nil
     -- \<open>Base case: empty list []\<close>
-    note `s \<sim>\<^bsub>u\<^esub> t`
-    moreover have "run s [] = s"
-              and "run t (purge [] u) = t"
+    have "run s [] = s"
+     and "run t (purge [] u) = t"
       by auto
-    ultimately show "?goal s t []" by simp
+    with `s \<sim>\<^bsub>u\<^esub> t` show "(run s []) \<sim>\<^bsub>u\<^esub> (run t (purge [] u))" by simp
 next
   case (Cons a' \<alpha>')
     -- \<open>Induction step:\<close>
@@ -100,17 +99,17 @@ next
     -- \<open>The following induction hypothesis about @{text \<alpha>'} is available
         (for any @{text s'} and @{text t'}):\<close>
     -- \<open>@{thm Cons.IH[of "s'" "t'"]}\<close>
-    show "?goal s t (a' # \<alpha>')"
+    show "(run s (a' # \<alpha>')) \<sim>\<^bsub>u\<^esub> (run t (purge (a' # \<alpha>') u))"
     proof (cases "(dom a') \<leadsto> u")
-      assume flow: "(dom a', u) \<in> FP"
+      assume flow: "(dom a') \<leadsto> u"
       with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> (step t a')"
         using sc              -- \<open>Step consistency\<close>
         unfolding step_consistent_def
         by auto
-      then have "?goal (step s a') (step t a') \<alpha>'"
+      then have "(run (step s a') \<alpha>') \<sim>\<^bsub>u\<^esub> (run (step t a') (purge \<alpha>' u))"
         using Cons.IH         -- \<open>Induction hypothesis!\<close>
         by simp
-      then show "?goal s t (a' # \<alpha>')" using flow by auto
+      then show ?case using flow by auto
     next
       assume noflow: "(dom a', u) \<notin> FP"
       then have "s \<sim>\<^bsub>u\<^esub> (step s a')"
@@ -120,10 +119,10 @@ next
       with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> t"
         using view_sym view_trans
         by blast
-      then have "?goal (step s a') t \<alpha>'"
+      then have "(run (step s a') \<alpha>') \<sim>\<^bsub>u\<^esub> (run t (purge \<alpha>' u))"
         using Cons.IH         -- \<open>Induction hypothesis!\<close>
         by simp
-      then show "?goal s t (a' # \<alpha>')" using noflow by auto
+      then show ?case using noflow by auto
     qed
 qed
 
