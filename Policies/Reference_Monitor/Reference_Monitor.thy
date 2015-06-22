@@ -30,6 +30,8 @@ using assms unfolding view_def by auto
 
 end
 
+subsection {* Verification *}
+
 locale Reference_Monitor =
   Structured_State s0 step out contents observe alter
 + NI s0 step out FP dom
