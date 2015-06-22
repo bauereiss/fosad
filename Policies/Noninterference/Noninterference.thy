@@ -83,7 +83,6 @@ lemma unwinding_lemma:
       and sc: "step_consistent"
       and s_equiv_t: "s \<sim>\<^bsub>u\<^esub> t"
   shows "(run s \<alpha>) \<sim>\<^bsub>u\<^esub> (run t (purge \<alpha> u))"
-    (is "?goal s t \<alpha>")
 using s_equiv_t
 proof (induction \<alpha> arbitrary: s t)
   case Nil
