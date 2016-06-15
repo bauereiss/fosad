@@ -4,23 +4,28 @@ theory Simple_RM_Example
 imports Simple_RM
 begin
 
+text \<open>As a concrete example, we consider a monitor with two domains and six variables.\<close>
+
 datatype domain = D1 | D2
 
 datatype var = A | B | C | X | Y | Z
 
-definition
- [simp]: "FP \<equiv> {(D1, D1), (D1, D2), (D2, D2)}"
+text \<open>Information is allowed to flow from @{text D1} to @{text D2} (and from each domain to itself),
+but not from @{text D2} to @{text D1}.\<close>
 
-primrec observe :: "domain \<Rightarrow> var set" where
+definition [simp]: "FP \<equiv> {(D1, D1), (D1, D2), (D2, D2)}"
+
+text \<open>The variables are assigned as follows:\<close>
+
+fun observe :: "domain \<Rightarrow> var set" where
   "observe D1 = {A, B, C}"
 | "observe D2 = {A, B, C, X, Y, Z}"
 
-primrec alter :: "domain \<Rightarrow> var set" where
+fun alter :: "domain \<Rightarrow> var set" where
   "alter D1 = {A, B, C, X, Y, Z}"
 | "alter D2 = {X, Y, Z}"
 
-definition s0 :: "var state" where
-  "s0 v = 0"
+definition s0 :: "var state" where "s0 v = 0"
 
 lemma [simp]: "\<And>d :: domain. d \<noteq> D1 \<longleftrightarrow> d = D2"
   and [simp]: "\<And>d :: domain. d \<noteq> D2 \<longleftrightarrow> d = D1"
