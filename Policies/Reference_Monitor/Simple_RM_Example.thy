@@ -35,7 +35,8 @@ text \<open>In order to instantiate the simple reference monitor, we just have t
 concrete flow policy and the definitions of @{text alter} and @{text observe} fit together ---
 which is automatic.\<close>
 
-interpretation Simple_RM s0 observe alter FP
+global_interpretation Simple_RM s0 observe alter FP
+defines ex_check = "check" and ex_step = "step" and ex_out = "out"
 proof
   show "refl FP" and "trans FP" by (auto simp add: refl_on_def trans_def)
 next
@@ -52,5 +53,20 @@ text \<open>The fact that this instance is secure is then directly inherited fro
 
 theorem "NI_secure"
 using monitor_secure .
+
+text \<open>We can also export our definitions as executable code (in SML, OCaml, Haskell, or Scala),
+and we can evaluate some example assignments.\<close>
+
+export_code s0 step out in Scala
+notation Assign ("_ :=\<^bsub>_\<^esub> _")
+
+value "out s0 (X :=\<^bsub>D2\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
+  -- \<open>outputs ``- 5''\<close>
+value "out s0 (A :=\<^bsub>D2\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
+  -- \<open>outputs ``0'', because the check fails\<close>
+value "out s0 (A :=\<^bsub>D1\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
+  -- \<open>outputs ``0'', because the check fails\<close>
+value "out s0 (A :=\<^bsub>D1\<^esub> (Minus (Plus (Var B) (Var C)) (Const 5)))"
+  -- \<open>outputs ``- 5''\<close>
 
 end

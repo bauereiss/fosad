@@ -11,14 +11,16 @@ subsubsection {* Language *}
 
 text \<open>As actions, we only consider assignments of the form @{text "n :=\<^bsub>d\<^esub> \<tau>"}, where @{text n}
 is a variable name, @{text d} is a domain, and @{text \<tau>} is an expression. We only consider basic
-expressions that are built using variable references and addition:\<close>
+expressions that are built using constants, variable references, subtraction, and addition:\<close>
 
 datatype 'var expr =
   Var 'var
+| Const integer
 | Plus "'var expr" "'var expr"
+| Minus "'var expr" "'var expr"
 
-text \<open>For example, @{text "Plus (Plus (Var a) (Var b)) (Var c)"} is an expression and denotes the
-addition of the variables @{text a}, @{text b}, and @{text c}.
+text \<open>For example, @{text "Minus (Plus (Var Y) (Var Z)) (Const 5)"} is an expression and denotes
+the expression @{text "(Y + Z) - 5"}.
 
 The state of the automaton is simply a mapping from variable names to integers.\<close>
 
@@ -28,13 +30,17 @@ text \<open>The function @{text \<E>} evaluates an expression in a given state.\
 
 fun \<E> :: "'var expr \<Rightarrow> 'var state \<Rightarrow> integer" where
   "\<E> (Var v) s = s v"
+| "\<E> (Const c) s = c"
 | "\<E> (Plus e1 e2) s = \<E> e1 s + \<E> e2 s"
+| "\<E> (Minus e1 e2) s = \<E> e1 s - \<E> e2 s"
 
 text \<open>The function @{text Vars} returns the set of variables appearing in an expression.\<close>
 
-primrec Vars :: "'var expr \<Rightarrow> 'var set" where
+fun Vars :: "'var expr \<Rightarrow> 'var set" where
   "Vars (Var v) = {v}"
+| "Vars (Const c) = {}"
 | "Vars (Plus e1 e2) = Vars e1 \<union> Vars e2"
+| "Vars (Minus e1 e2) = Vars e1 \<union> Vars e2"
 
 text \<open>Actions are assignments of expressions to variables, annotated with a domain.\<close>
 
