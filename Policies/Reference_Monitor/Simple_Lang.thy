@@ -16,11 +16,11 @@ expressions that are built using constants, variable references, subtraction, an
 datatype 'var expr =
   Var 'var
 | Const integer
-| Plus "'var expr" "'var expr"
-| Minus "'var expr" "'var expr"
+| Plus "('var expr)" "('var expr)"
+| Minus "('var expr)" "('var expr)"
 
-text \<open>For example, @{text "Minus (Plus (Var Y) (Var Z)) (Const 5)"} is an expression and denotes
-the expression @{text "(Y + Z) - 5"}.
+text \<open>For example, the term @{text "Minus (Plus (Var Y) (Var Z)) (Const 5)"} is a syntactic
+representation of an expression which would more commonly be written as @{text "(Y + Z) - 5"}.
 
 The state of the automaton is simply a mapping from variable names to integers.\<close>
 

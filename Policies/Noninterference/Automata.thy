@@ -43,6 +43,9 @@ concatenate two traces of actions, if the first trace ends in the starting state
 lemma "\<lbrakk>run s \<alpha> = t \<and> run t \<beta> = u\<rbrakk> \<Longrightarrow> run s (\<alpha> @ \<beta>) = u"
 by (induction \<alpha> arbitrary: s) auto
 
+text \<open>Note that free variables in lemmas are implicitly universally quantified, i.e.\ this lemma
+holds @{emph \<open>for all\<close>} \<open>s\<close>, \<open>t\<close>, \<open>u\<close>, \<open>\<alpha>\<close>, and \<open>\<beta>\<close>.\<close>
+
 end
 
 end
