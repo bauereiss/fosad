@@ -7,7 +7,7 @@ We will prove a noninterference property: buyers of normal tickets learn nothing
 the actions of VIP buyers.\<close>
 
 theory Ticket_Automaton
-imports Reference_Monitor "~~/src/HOL/Library/Code_Target_Nat"
+imports "../../Reference_Monitor" "~~/src/HOL/Library/Code_Target_Nat"
 begin
 
 text \<open>The state stores the number of remaining normal and VIP tickets, respectively, in two

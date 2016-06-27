@@ -1,7 +1,7 @@
 subsubsection {* Monitor *}
 
 theory Simple_RM
-imports Reference_Monitor Simple_Lang
+imports "../../Reference_Monitor" Simple_Lang
 begin
 
 text \<open>We now define the implementation of a reference monitor for our simple programming language

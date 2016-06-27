@@ -6,7 +6,7 @@ session "Reference_Monitor" = "HOL" +
     (* Bar *)
   theories
     "Noninterference/Noninterference"
-    "Reference_Monitor/Simple_RM_Example"
-    "Reference_Monitor/Ticket_Automaton"
+    "Reference_Monitor/Examples/Simple_Lang/Simple_RM_Example"
+    "Reference_Monitor/Examples/Ticket/Ticket_Automaton"
   document_files
     "root.tex"
