@@ -37,14 +37,15 @@ text \<open>After writing down definitions, Isabelle allows us to prove properti
 we can (almost\footnote{We tell Isabelle to perform induction over @{text \<alpha>}. Moreover, we
 tell Isabelle to generalize the induction hypothesis to arbitrary states @{text s}, because
 we need to apply the induction hypothesis not for the original @{text s}, but for the successor
-state reached after performing the first action of the trace.}) automatically prove that we can
-concatenate two traces of actions, if the first trace ends in the starting state of the second.\<close>
+state reached after performing the first action of the trace.}) automatically prove that running
+the concatenation of two action sequences \<open>\<alpha>\<close> and \<open>\<beta>\<close> corresponds to running \<open>\<alpha>\<close> from the initial
+state, and then running \<open>\<beta>\<close> from the final state of \<open>\<alpha>\<close>.\<close>
 
-lemma "\<lbrakk>run s \<alpha> = t \<and> run t \<beta> = u\<rbrakk> \<Longrightarrow> run s (\<alpha> @ \<beta>) = u"
+lemma run_append: "run s (\<alpha> @ \<beta>) = run (run s \<alpha>) \<beta>"
 by (induction \<alpha> arbitrary: s) auto
 
 text \<open>Note that free variables in lemmas are implicitly universally quantified, i.e.\ this lemma
-holds @{emph \<open>for all\<close>} \<open>s\<close>, \<open>t\<close>, \<open>u\<close>, \<open>\<alpha>\<close>, and \<open>\<beta>\<close>.\<close>
+holds @{emph \<open>for all\<close>} \<open>s\<close>, \<open>\<alpha>\<close>, and \<open>\<beta>\<close>.\<close>
 
 end
 

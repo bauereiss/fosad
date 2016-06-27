@@ -10,12 +10,10 @@ theory Ticket_Automaton
 imports "../../Reference_Monitor" "~~/src/HOL/Library/Code_Target_Nat"
 begin
 
-text \<open>The state stores the number of remaining normal and VIP tickets, respectively, in two
-variables.\<close>
+text \<open>The state stores the number of remaining normal and VIP tickets, respectively, as a
+pair of natural numbers.\<close>
 
-record state =
-  NTickets :: nat
-  VTickets :: nat
+type_synonym state = "nat \<times> nat"
 
 text \<open>There are actions for initializing the system with a given number of normal or VIP tickets,
 buying tickets, and querying the number of remaining tickets.\<close>
@@ -35,8 +33,8 @@ datatype "output" =
 | Out_NVTickets "(nat \<times> nat)"
 
 datatype var =
-  Var_NTickets
-| Var_VTickets
+  NTickets
+| VTickets
 
 text \<open>The automaton starts without any tickets. The initialization actions supply the system with
 a given number of tickets of the respective category. Customers can query the remaining number of
@@ -44,29 +42,29 @@ tickets (where prospective VIP customers can query both the remaining numbers of
 tickets.) Buying is possible as long as there are still remaining tickets. If a category of
 tickets is sold out, it can be refilled with the corresponding initialization action.\<close>
 
-definition "s0 = \<lparr>NTickets = 0, VTickets = 0\<rparr>"
+definition "s0 = (0, 0)"
 
 fun step :: "state \<Rightarrow> act \<Rightarrow> state" where
-  "step s (NInit i) = (if NTickets s = 0 then s\<lparr>NTickets := i\<rparr> else s)"
-| "step s (VInit j) = (if VTickets s = 0 then s\<lparr>VTickets := j\<rparr> else s)"
-| "step s (NQuery) = s"
-| "step s (VQuery) = s"
-| "step s (NBuy) = (if NTickets s = 0 then s else s\<lparr>NTickets := NTickets s - 1\<rparr>)"
-| "step s (VBuy) = (if VTickets s = 0 then s else s\<lparr>VTickets := VTickets s - 1\<rparr>)"
+  "step (n, v) (NInit i) = (if n = 0 then (i, v) else (n, v))"
+| "step (n, v) (VInit j) = (if v = 0 then (n, j) else (n, v))"
+| "step (n, v) (NQuery) = (n, v)"
+| "step (n, v) (VQuery) = (n, v)"
+| "step (n, v) (NBuy) = (if n = 0 then (n, v) else (n - 1, v))"
+| "step (n, v) (VBuy) = (if v = 0 then (n, v) else (n, v - 1))"
 
 fun out :: "state \<Rightarrow> act \<Rightarrow> output" where
-  "out s (NInit i) = (if NTickets s = 0 then OK else Err)"
-| "out s (VInit j) = (if VTickets s = 0 then OK else Err)"
-| "out s (NQuery) = Out_NTickets (NTickets s)"
-| "out s (VQuery) = Out_NVTickets (NTickets s, VTickets s)"
-| "out s (NBuy) = (if NTickets s = 0 then Err else OK)"
-| "out s (VBuy) = (if VTickets s = 0 then Err else OK)"
+  "out (n, v) (NInit i) = (if n = 0 then OK else Err)"
+| "out (n, v) (VInit j) = (if v = 0 then OK else Err)"
+| "out (n, v) (NQuery) = Out_NTickets n"
+| "out (n, v) (VQuery) = Out_NVTickets (n, v)"
+| "out (n, v) (NBuy) = (if n = 0 then Err else OK)"
+| "out (n, v) (VBuy) = (if v = 0 then Err else OK)"
 
 text \<open>This is an instance of automata with structured states.\<close>
 
 fun contents :: "state \<Rightarrow> var \<Rightarrow> nat" where
-  "contents s Var_NTickets = NTickets s"
-| "contents s Var_VTickets = VTickets s"
+  "contents (n, v) NTickets = n"
+| "contents (n, v) VTickets = v"
 
 global_interpretation Structured_State s0 step out contents defines ex_run = run .
 
@@ -103,7 +101,7 @@ qed
 
 text \<open>The noninterference policy requires that the output of \<open>N\<close> actions must not depend on any
 \<open>V\<close> actions that have happened before. In the following example, this is the case: Purging the
-\<open>V\<close> actions does not change the output of \<open>NQuery\<close>.\<close>
+actions that are secret for \<open>N\<close> does not change the output of \<open>NQuery\<close>.\<close>
 
 value "out (run s0 [NBuy, NInit 10000, NBuy, VInit 100, NBuy, NInit 50, VBuy, NBuy]) NQuery"
  -- \<open>outputs \<open>Out_NTickets 9997\<close>\<close>
@@ -117,12 +115,12 @@ We implement the policy by restricting which variables may be read and written b
 domains.\<close>
 
 fun observe :: "domain \<Rightarrow> var set" where
-  "observe N = {Var_NTickets}"
-| "observe V = {Var_NTickets, Var_VTickets}"
+  "observe N = {NTickets}"
+| "observe V = {NTickets, VTickets}"
 
 fun alter :: "domain \<Rightarrow> var set" where
-  "alter N = {Var_NTickets}"
-| "alter V = {Var_VTickets}"
+  "alter N = {NTickets}"
+| "alter V = {VTickets}"
 
 text \<open>This essentially specifies access control requirements, which are sufficient to implement
 the information flow policy.\<close>
@@ -148,9 +146,9 @@ for each domain. For our concrete system, we can simplify the general definition
 as follows.\<close>
 
 lemma [simp]:
- "(s \<sim>\<^bsub>N\<^esub> t) \<longleftrightarrow> NTickets s = NTickets t"
+ "(s \<sim>\<^bsub>N\<^esub> t) \<longleftrightarrow> contents s NTickets = contents t NTickets"
  "(s \<sim>\<^bsub>V\<^esub> t) \<longleftrightarrow> s = t"
-unfolding view_def by auto
+unfolding view_def by (cases s; cases t; auto)+
 
 text \<open>It turns out that, using these characterizations of the equivalence relations, the built-in
 reasoner in Isabelle can prove the reference monitor assumptions automatically (after case
@@ -158,9 +156,9 @@ distinction wrt.\ actions and variables.)\<close>
 
 global_interpretation Reference_Monitor s0 step out contents FP dom observe alter
 proof (unfold_locales, goal_cases)
-  case (1 s t a) then show ?case by (cases a) auto next
-  case (2 s t a n) then show ?case by (cases a; cases n) auto next
-  case (3 s a n) then show ?case by (cases a; cases n) (auto split: if_splits)
+  case (1 s t a) then show ?case by (cases s; cases t; cases a) auto next
+  case (2 s t a n) then show ?case by (cases s; cases t; cases a; cases n) auto next
+  case (3 s a n) then show ?case by (cases s; cases a; cases n) (auto split: if_splits)
 qed
 
 text \<open>Hence, the system is secure wrt.\ the noninterference policy.\<close>
