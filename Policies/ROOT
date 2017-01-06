@@ -1,10 +1,12 @@
 session "Reference_Monitor" = "HOL" +
   options [document = pdf, document_output = "output"]
   theories [document = false]
+    "~~/src/HOL/Library/Code_Target_Nat"
     (* Foo *)
     (* Bar *)
   theories
     "Noninterference/Noninterference"
-    "Reference_Monitor/Simple_RM_Example"
+    "Reference_Monitor/Examples/Simple_Lang/Simple_RM_Example"
+    "Reference_Monitor/Examples/Ticket/Ticket_Automaton"
   document_files
     "root.tex"
