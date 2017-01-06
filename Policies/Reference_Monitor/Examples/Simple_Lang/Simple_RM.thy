@@ -94,7 +94,7 @@ next
   then have "check a"
         and "contents (step s a) n = \<E> e s"
         and "contents (step t a) n = \<E> e t"
-    by (auto split: split_if_asm)
+    by (auto split: if_splits)
   then show "contents (step s a) n = contents (step t a) n"
     using `s \<sim>\<^bsub>dom a\<^esub> t`
     by (auto intro: view_coincidence)
@@ -103,7 +103,7 @@ next
   fix s n fix a :: "('var, 'dom) cmd"
   obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "contents (step s a) n \<noteq> contents s n"
-  then have "check a" and "v = n" by (auto split: split_if_asm)
+  then have "check a" and "v = n" by (auto split: if_splits)
   then show "n \<in> alter (dom a)" by simp
 qed
 
