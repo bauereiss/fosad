@@ -12,6 +12,6 @@ Currently, it contains formalizations of
 
 Formalizations of some of the other parts of the lecture are available
 elsewhere. For example, the Volpano-Smith security type system can be found
-[here](http://afp.sourceforge.net/entries/VolpanoSmith.shtml) in the [Archive
-of Formal Proofs](http://afp.sourceforge.net/index.shtml).
+[here](https://www.isa-afp.org/entries/VolpanoSmith.shtml) in the [Archive
+of Formal Proofs](https://www.isa-afp.org/).
 
