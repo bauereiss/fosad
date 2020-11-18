@@ -1,4 +1,4 @@
-subsection {* Proving Noninterference *}
+subsection \<open>Proving Noninterference\<close>
 
 theory BLP_NI
 imports BLP_Monitor "../Noninterference/Noninterference"

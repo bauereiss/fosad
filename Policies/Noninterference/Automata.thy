@@ -1,4 +1,4 @@
-section {* Basic automata *}
+section \<open>Basic automata\<close>
 
 theory Automata
 imports Main

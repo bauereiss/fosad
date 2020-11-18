@@ -1,10 +1,10 @@
-section {* A Reference Monitor for Bell/LaPadula *}
+section \<open>A Reference Monitor for Bell/LaPadula\<close>
 
 theory BLP_Monitor
 imports "../Noninterference/Automata"
 begin
 
-subsection {* Defining the Monitor *}
+subsection \<open>Defining the Monitor\<close>
 
 datatype perm = Read | Write
 
@@ -15,10 +15,10 @@ datatype 'val out = Value 'val | Ok | Err
 type_synonym ('obj, 'val) state = "('obj \<Rightarrow> 'val)"
 
 locale BLP_Monitor =
-  fixes sc :: "'subj \<Rightarrow> ('level :: lattice)"   -- \<open>subject clearance\<close>
-    and oc :: "'obj \<Rightarrow> 'level"                 -- \<open>object classification\<close>
-    and M :: "'subj \<Rightarrow> 'obj \<Rightarrow> perm set"       -- \<open>permission matrix\<close>
-    and init :: "('obj, 'val) state"           -- \<open>initial state (assigning values to objects)\<close>
+  fixes sc :: "'subj \<Rightarrow> ('level :: lattice)"   \<comment> \<open>subject clearance\<close>
+    and oc :: "'obj \<Rightarrow> 'level"                 \<comment> \<open>object classification\<close>
+    and M :: "'subj \<Rightarrow> 'obj \<Rightarrow> perm set"       \<comment> \<open>permission matrix\<close>
+    and init :: "('obj, 'val) state"           \<comment> \<open>initial state (assigning values to objects)\<close>
   assumes read_secure: "Read \<in> M s obj \<Longrightarrow> oc obj \<le> sc s"
       and write_secure: "Write \<in> M s obj \<Longrightarrow> sc s \<le> oc obj"
 begin

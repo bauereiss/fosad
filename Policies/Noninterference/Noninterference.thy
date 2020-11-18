@@ -1,4 +1,4 @@
-section {* Noninterference *}
+section \<open>Noninterference\<close>
 
 theory Noninterference
 imports Automata
@@ -7,7 +7,7 @@ begin
 text \<open>We now consider security of such automata in the sense of Goguen and Meseguer's notion
 of @{emph \<open>noninterference\<close>}.\<close>
 
-subsection {* Definition *}
+subsection \<open>Definition\<close>
 
 text \<open>For a given automaton, we add a function @{text dom}, which assigns a security domain to each
 action, and a flow policy, which is a reflexive and transitive relation between domains, specifying
@@ -52,7 +52,7 @@ In the following sections, we focus on techniques for the @{emph \<open>verifica
 
 end
 
-subsection {* Verification *}
+subsection \<open>Verification\<close>
 
 text \<open>In order to use the unwinding verification technique, we first have to choose a
 @{emph \<open>view partitioning\<close>}, i.e.\ a family of equivalence relations on states, indexed by domain.
@@ -130,41 +130,41 @@ lemma unwinding_lemma:
 using `s \<sim>\<^bsub>u\<^esub> t`
 proof (induction \<alpha> arbitrary: s t)
   case Nil
-    -- \<open>Base case: empty list []\<close>
+    \<comment> \<open>Base case: empty list []\<close>
     have "run s [] = s"
      and "run t (purge [] u) = t"
       by auto
     with `s \<sim>\<^bsub>u\<^esub> t` show "(run s []) \<sim>\<^bsub>u\<^esub> (run t (purge [] u))" by simp
 next
   case (Cons a' \<alpha>')
-    -- \<open>Inductive step:\<close>
-    -- \<open>List starts with action @{text a'} and continues with list @{text \<alpha>'} (possibly empty).\<close>
-    -- \<open>The following induction hypothesis about @{text \<alpha>'} is available
+    \<comment> \<open>Inductive step:\<close>
+    \<comment> \<open>List starts with action @{text a'} and continues with list @{text \<alpha>'} (possibly empty).\<close>
+    \<comment> \<open>The following induction hypothesis about @{text \<alpha>'} is available
         (for any @{text s'} and @{text t'}):\<close>
-    -- \<open>@{thm Cons.IH[of "s'" "t'"]}\<close>
-    -- \<open>We proceed by a case distinction whether @{text a'} is visible for @{text u} or not.\<close>
+    \<comment> \<open>@{thm Cons.IH[of "s'" "t'"]}\<close>
+    \<comment> \<open>We proceed by a case distinction whether @{text a'} is visible for @{text u} or not.\<close>
     show "(run s (a' # \<alpha>')) \<sim>\<^bsub>u\<^esub> (run t (purge (a' # \<alpha>') u))"
     proof (cases)
       assume flow: "(dom a') \<leadsto> u"
       with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> (step t a')"
-        using sc              -- \<open>Step consistency\<close>
+        using sc              \<comment> \<open>Step consistency\<close>
         unfolding step_consistent_def
         by auto
       then have "(run (step s a') \<alpha>') \<sim>\<^bsub>u\<^esub> (run (step t a') (purge \<alpha>' u))"
-        using Cons.IH         -- \<open>Induction hypothesis!\<close>
+        using Cons.IH         \<comment> \<open>Induction hypothesis!\<close>
         by simp
       then show ?case using flow by auto
     next
       assume noflow: "(dom a', u) \<notin> FP"
       then have "s \<sim>\<^bsub>u\<^esub> (step s a')"
-        using lr              -- \<open>Locally respects @{text \<leadsto>}\<close>
+        using lr              \<comment> \<open>Locally respects @{text \<leadsto>}\<close>
         unfolding locally_respects_FP_def
         by auto
       with `s \<sim>\<^bsub>u\<^esub> t` have "(step s a') \<sim>\<^bsub>u\<^esub> t"
         using view_sym view_trans
         by blast
       then have "(run (step s a') \<alpha>') \<sim>\<^bsub>u\<^esub> (run t (purge \<alpha>' u))"
-        using Cons.IH         -- \<open>Induction hypothesis!\<close>
+        using Cons.IH         \<comment> \<open>Induction hypothesis!\<close>
         by simp
       then show ?case using noflow by auto
     qed

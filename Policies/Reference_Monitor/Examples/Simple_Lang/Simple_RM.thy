@@ -1,4 +1,4 @@
-subsubsection {* Monitor *}
+subsubsection \<open>Monitor\<close>
 
 theory Simple_RM
 imports "../../Reference_Monitor" Simple_Lang
@@ -69,7 +69,7 @@ text \<open>We then prove the three reference monitor assumptions.\<close>
 
 sublocale Reference_Monitor s0 step out contents FP dom observe alter
 proof
-  -- \<open>RMA1\<close>
+  \<comment> \<open>RMA1\<close>
   fix s t fix a :: "('var, 'dom) cmd"
   obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "s \<sim>\<^bsub>dom a\<^esub> t"
@@ -85,7 +85,7 @@ proof
       then show "out s a = out t a" by auto
   qed
 next
-  -- \<open>RMA2\<close>
+  \<comment> \<open>RMA2\<close>
   fix s t n fix a :: "('var, 'dom) cmd"
   obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "s \<sim>\<^bsub>dom a\<^esub> t"
@@ -99,7 +99,7 @@ next
     using `s \<sim>\<^bsub>dom a\<^esub> t`
     by (auto intro: view_coincidence)
 next
-  -- \<open>RMA3\<close>
+  \<comment> \<open>RMA3\<close>
   fix s n fix a :: "('var, 'dom) cmd"
   obtain v d e where [simp]: "a = (v :=\<^bsub>d\<^esub> e)" by (cases a)
   assume "contents (step s a) n \<noteq> contents s n"

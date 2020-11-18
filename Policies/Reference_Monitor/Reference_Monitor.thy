@@ -1,4 +1,4 @@
-section {* Reference Monitors *}
+section \<open>Reference Monitors\<close>
 
 theory Reference_Monitor
 imports "../Noninterference/Noninterference"
@@ -7,7 +7,7 @@ begin
 text \<open>We now consider a special class of automata with structured state: there is a type
 @{text "'var"} of variable names, and a state stores a value for each variable.\<close>
 
-subsection {* Definition *}
+subsection \<open>Definition\<close>
 
 text \<open>We formalize this with a function @{text contents}, which takes a state and a variable name,
 and returns the value stored under that variable name in the state.\<close>
@@ -19,7 +19,7 @@ locale Structured_State =
   and out :: "'state \<Rightarrow> 'act \<Rightarrow> 'out"
 + fixes contents :: "'state \<Rightarrow> 'var \<Rightarrow> 'val"
 
-subsection {* Verification *}
+subsection \<open>Verification\<close>
 
 text \<open>We implement a flow policy for an automaton with structured state by specifying which
 variables can be read and written in a domain: @{text "observe u"} gives the set of variables that

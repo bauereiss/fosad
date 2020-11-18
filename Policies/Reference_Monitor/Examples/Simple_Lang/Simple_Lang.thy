@@ -1,4 +1,4 @@
-subsection {* Example: A Reference Monitor for a Simple Language *}
+subsection \<open>Example: A Reference Monitor for a Simple Language\<close>
 
 theory Simple_Lang
 imports Main
@@ -7,7 +7,7 @@ begin
 text \<open>In this example we will use the above theorem to prove the security of a very simplistic
 programming language incorporating a reference monitor.\<close>
 
-subsubsection {* Language *}
+subsubsection \<open>Language\<close>
 
 text \<open>As actions, we only consider assignments of the form @{text "n :=\<^bsub>d\<^esub> \<tau>"}, where @{text n}
 is a variable name, @{text d} is a domain, and @{text \<tau>} is an expression. We only consider basic

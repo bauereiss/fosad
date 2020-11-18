@@ -1,4 +1,4 @@
-subsection {* Example: A Ticket Automaton *}
+subsection \<open>Example: A Ticket Automaton\<close>
 
 text \<open>As another example, we consider an automaton modeling a ticket vending system, where
 users can buy normal tickets or VIP tickets.
@@ -7,7 +7,7 @@ We will prove a noninterference property: buyers of normal tickets learn nothing
 the actions of VIP buyers.\<close>
 
 theory Ticket_Automaton
-imports "../../Reference_Monitor" "~~/src/HOL/Library/Code_Target_Nat"
+imports "../../Reference_Monitor" "HOL-Library.Code_Target_Nat"
 begin
 
 text \<open>The state stores the number of remaining normal and VIP tickets, respectively, as a
@@ -69,7 +69,7 @@ fun contents :: "state \<Rightarrow> var \<Rightarrow> nat" where
 global_interpretation Structured_State s0 step out contents defines ex_run = run .
 
 value "out (run s0 [NBuy, NInit 10000, NBuy, VInit 100, NBuy, NInit 50, VBuy, NBuy]) VQuery"
- -- \<open>outputs \<open>Out_NVTickets (9997, 99)\<close>\<close>
+ \<comment> \<open>outputs \<open>Out_NVTickets (9997, 99)\<close>\<close>
 
 text \<open>We now consider two security domains: Normal ticket buyers, and VIP ticket buyers.\<close>
 
@@ -104,9 +104,9 @@ text \<open>The noninterference policy requires that the output of \<open>N\<clo
 actions that are secret for \<open>N\<close> does not change the output of \<open>NQuery\<close>.\<close>
 
 value "out (run s0 [NBuy, NInit 10000, NBuy, VInit 100, NBuy, NInit 50, VBuy, NBuy]) NQuery"
- -- \<open>outputs \<open>Out_NTickets 9997\<close>\<close>
+ \<comment> \<open>outputs \<open>Out_NTickets 9997\<close>\<close>
 value "out (run s0 (purge [NBuy, NInit 10000, NBuy, VInit 100, NBuy, NInit 50, VBuy, NBuy] N)) NQuery"
- -- \<open>outputs \<open>Out_NTickets 9997\<close>\<close>
+ \<comment> \<open>outputs \<open>Out_NTickets 9997\<close>\<close>
 
 text \<open>We prove that noninterference holds generally for this system by proving the reference
 monitor assumptions.

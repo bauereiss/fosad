@@ -1,4 +1,4 @@
-subsubsection {* Example instantiation *}
+subsubsection \<open>Example instantiation\<close>
 
 theory Simple_RM_Example
 imports Simple_RM
@@ -61,12 +61,12 @@ export_code s0 step out in Scala
 notation Assign ("_ :=\<^bsub>_\<^esub> _")
 
 value "out s0 (X :=\<^bsub>D2\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
-  -- \<open>outputs ``- 5''\<close>
+  \<comment> \<open>outputs ``- 5''\<close>
 value "out s0 (A :=\<^bsub>D2\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
-  -- \<open>outputs ``0'', because the check fails\<close>
+  \<comment> \<open>outputs ``0'', because the check fails\<close>
 value "out s0 (A :=\<^bsub>D1\<^esub> (Minus (Plus (Var Y) (Var Z)) (Const 5)))"
-  -- \<open>outputs ``0'', because the check fails\<close>
+  \<comment> \<open>outputs ``0'', because the check fails\<close>
 value "out s0 (A :=\<^bsub>D1\<^esub> (Minus (Plus (Var B) (Var C)) (Const 5)))"
-  -- \<open>outputs ``- 5''\<close>
+  \<comment> \<open>outputs ``- 5''\<close>
 
 end
